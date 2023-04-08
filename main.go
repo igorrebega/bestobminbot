@@ -27,6 +27,21 @@ func getUSDPrice() (string, error) {
 	return usdPrice, nil
 }
 
+func sendUSDPriceDaily(b *tb.Bot) {
+	ticker := time.NewTicker(24 * time.Hour)
+	for range ticker.C {
+		usdPrice, err := getUSDPrice()
+		if err != nil {
+			log.Println("Error getting USD price:", err)
+			continue
+		}
+
+		// Replace "YOUR_CHAT_ID" with your actual chat ID, which you can obtain by sending a message to your bot and checking the logs.
+		chatID := tb.ChatID(123)
+		b.Send(chatID, fmt.Sprintf("Daily USD price: %s", usdPrice))
+	}
+}
+
 func main() {
 	token := os.Getenv("TELEGRAM_BOT_TOKEN")
 	if token == "" {
@@ -63,7 +78,10 @@ If you have any questions, feel free to ask.`
 		}
 	})
 
-	log.Printf("Bot started on @%s", b.Me.Username)
+	b.Handle("/mychatid", func(m *tb.Message) {
+		chatID := m.Chat.ID
+		b.Send(m.Sender, fmt.Sprintf("Your chat ID is: %d", chatID))
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -80,6 +98,9 @@ If you have any questions, feel free to ask.`
 			log.Fatalf("Error starting HTTP server: %v", err)
 		}
 	}()
+
+	go sendUSDPriceDaily(b)
+	log.Printf("Bot started on @%s", b.Me.Username)
 
 	b.Start()
 }
