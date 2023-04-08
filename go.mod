@@ -30,3 +30,5 @@ require (
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/tucnak/telebot.v2 v2.5.0 // indirect
 )
+
+// +heroku goVersion go1.18
