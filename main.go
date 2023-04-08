@@ -36,8 +36,7 @@ func sendUSDPriceDaily(b *tb.Bot) {
 			continue
 		}
 
-		// Replace "YOUR_CHAT_ID" with your actual chat ID, which you can obtain by sending a message to your bot and checking the logs.
-		chatID := tb.ChatID(123)
+		chatID := tb.ChatID(381466119)
 		b.Send(chatID, fmt.Sprintf("Daily USD price: %s", usdPrice))
 	}
 }
