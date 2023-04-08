@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"time"
-
 	"github.com/gocolly/colly/v2"
 	tb "gopkg.in/tucnak/telebot.v2"
+	"log"
+	"net/http"
+	"os"
+	"time"
 )
 
 func getUSDPrice() (string, error) {
@@ -64,5 +64,22 @@ If you have any questions, feel free to ask.`
 	})
 
 	log.Printf("Bot started on @%s", b.Me.Username)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000" // Default port if not specified
+	}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, I'm your Telegram bot!")
+	})
+
+	go func() {
+		log.Printf("Starting HTTP server on port %s", port)
+		if err := http.ListenAndServe(":"+port, nil); err != nil {
+			log.Fatalf("Error starting HTTP server: %v", err)
+		}
+	}()
+
 	b.Start()
 }
