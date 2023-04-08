@@ -1,6 +1,0 @@
-build:
-  lang: go
-  config:
-    GO_IMPORT_PATH: main
-  script:
-    - GOOS=linux GOARCH=amd64 go build -o main
