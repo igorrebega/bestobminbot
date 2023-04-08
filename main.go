@@ -43,8 +43,14 @@ func main() {
 		return
 	}
 
-	b.Handle("/hello", func(m *tb.Message) {
-		b.Send(m.Sender, "Hello, I'm your Telegram bot!")
+	b.Handle("/start", func(m *tb.Message) {
+		helpText := `Welcome to the USD Price bot!
+Here's a list of available commands:
+
+/buyusd - Get the current USD price
+
+If you have any questions, feel free to ask.`
+		b.Send(m.Sender, helpText)
 	})
 
 	b.Handle("/buyusd", func(m *tb.Message) {
