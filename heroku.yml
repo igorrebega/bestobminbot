@@ -1,0 +1,6 @@
+build:
+  lang: go
+  config:
+    GO_IMPORT_PATH: main
+  script:
+    - go build -o main
