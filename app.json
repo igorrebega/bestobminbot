@@ -1,0 +1,14 @@
+{
+  "name": "Your App Name",
+  "description": "Your App Description",
+  "env": {
+    "GOVERSION": {
+      "description": "Go version",
+      "value": "go1.18"
+    }
+  },
+  "scripts": {
+    "postdeploy": "go build -o main"
+  },
+  "addons": []
+}
