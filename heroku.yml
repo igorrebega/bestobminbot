@@ -1,0 +1,11 @@
+build:
+  docker:
+    go:
+      go-version: go1.18
+  config:
+    GO_ENV: production
+    GO111MODULE: "on"
+  run:
+    - go build -o main
+run:
+  web: ./main
