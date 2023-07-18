@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"io/ioutil"
 )
 
 func getUSDPrice() (string, error) {
@@ -25,6 +26,43 @@ func getUSDPrice() (string, error) {
 	}
 
 	return usdPrice, nil
+}
+
+func getSpots (string, error) {
+	req, err := http.NewRequest("GET", "https://online.mfa.gov.ua/api/v1/queue/consulates/52/schedule?date=2023-06-23&dateEnd=2023-06-23&serviceId=530", nil)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("authority", "online.mfa.gov.ua")
+	req.Header.Set("accept", "application/json, text/plain, */*")
+	req.Header.Set("accept-language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("authorization", "Bearer YOUR_TOKEN_HERE")
+	req.Header.Set("cache-control", "no-cache")
+	req.Header.Set("cookie", "YOUR_COOKIE_HERE")
+	req.Header.Set("pragma", "no-cache")
+	req.Header.Set("referer", "https://online.mfa.gov.ua/application")
+	req.Header.Set("sec-ch-ua", `"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"`)
+	req.Header.Set("sec-ch-ua-mobile", "?0")
+	req.Header.Set("sec-ch-ua-platform", "macOS")
+	req.Header.Set("sec-fetch-dest", "empty")
+	req.Header.Set("sec-fetch-mode", "cors")
+	req.Header.Set("sec-fetch-site", "same-origin")
+	req.Header.Set("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
 }
 
 func sendUSDPriceDaily(b *tb.Bot) {
